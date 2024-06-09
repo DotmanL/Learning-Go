@@ -1,44 +1,22 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
+
+	"example.com/banking_app/fileOps"
+	"github.com/Pallinder/go-randomdata"
 )
 
 const fileName string = "dotmanBalance.txt"
 
-func getBalanceFromFile() (float64, error) {
-	// Typically errors doesn't crash proejct in Go, rather returns a default value
-	data, err := os.ReadFile(fileName)
-	if err != nil {
-		return 1000, errors.New("failed to find balance file")
-	}
-	balanceText := string(data)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-
-	if err != nil {
-		return 1000, errors.New("failed to parse srtored balance value")
-	}
-	return balance, nil
-}
-
-func writeBalanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	// 0644 is a file permission notation for operating systems(especially) that allows owner to read and write but others can only read it
-	// https://www.redhat.com/sysadmin/linux-file-permissions-explained
-	os.WriteFile(fileName, []byte(balanceText), 0644)
-}
-
 func main() {
-	var accountBalance, err = getBalanceFromFile()
+	var accountBalance, err = fileOps.GetFloatFromFile(fileName)
 
 	if err != nil {
 		fmt.Println("ERROR")
 		fmt.Println(err)
 		fmt.Println("--------")
-		return
+		// return
 		//Panic  will end the application and also return the error message
 		// panic("Can't continue sorry")
 	}
@@ -46,13 +24,11 @@ func main() {
 	fmt.Println("Account Balance :", accountBalance)
 	fmt.Println("Welcome to Dotman Go Bank")
 
-	for {
-		fmt.Println("What do you want to do today?")
-		fmt.Println("1. Check balance")
-		fmt.Println("2. Deposit money")
-		fmt.Println("3. Withdraw money")
-		fmt.Println("4. Exit")
+	// Showing the use of function from a package
+	fmt.Println(randomdata.PhoneNumber())
 
+	for {
+		presentOptions()
 		var choice int
 		fmt.Print("Your choice: ")
 		fmt.Scan(&choice)
@@ -70,7 +46,7 @@ func main() {
 			}
 			// accountBalance = accountBalance + depositAmount
 			accountBalance += depositAmount
-			writeBalanceToFile(accountBalance)
+			fileOps.WriteFloatToFile(accountBalance, fileName)
 			fmt.Println("Balance Updated, new amount: ", accountBalance)
 		case 3:
 			var withdrawalAmount float64
@@ -88,7 +64,7 @@ func main() {
 			}
 
 			accountBalance -= withdrawalAmount
-			writeBalanceToFile(accountBalance)
+			fileOps.WriteFloatToFile(accountBalance, fileName)
 			fmt.Println("Balance Updated, new amount: ", accountBalance)
 		default:
 			fmt.Println("Goodbye!")
