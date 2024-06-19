@@ -19,7 +19,7 @@ func main() {
 	// another way of declaring a pointer, the * before the type indicates its a pointer
 	// var agePointer *int = &age
 
-	// because of the & before the vaariable, we get the pointer address
+	// because of the & before the variable, we get the pointer address
 	agePointer := &age
 
 	// Avoid unnecessary value copies example
