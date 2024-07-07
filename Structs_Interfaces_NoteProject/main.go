@@ -67,7 +67,7 @@ func main() {
 func printSomething(value interface{}) {
 
 	//outside a switch, type checking
-	intVal, isOfType := value.(int) // thish checks if the value is of type int
+	intVal, isOfType := value.(int) // this checks if the value is of type int
 
 	if isOfType {
 		fmt.Println("Integer:", intVal)
